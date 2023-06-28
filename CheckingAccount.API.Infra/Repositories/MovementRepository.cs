@@ -29,16 +29,19 @@ namespace CheckingAccount.API.Infra.Repositories
 
         public async Task<IEnumerable<Movement>> GetMovementAsync(string accountId, DateTime initialDate, DateTime finalDate)
         {
-            var movement = await _checkingAccountDb.Movements.Where(x => x.Id.Equals(accountId) && x.Date >= initialDate && x.Date <= finalDate).ToListAsync();
+            List<Movement> movement = new();
+            movement = await _checkingAccountDb.Movements.Where(x => x.Id.Equals(accountId) && x.Date >= initialDate && x.Date <= finalDate).ToListAsync();
 
-            return (IEnumerable<Movement>)movement;
+            return movement;
         }
 
         public async Task<IEnumerable<Movement>> GetMovementByOperationTypeAsync(string accountId, string type)
         {
-            var movement = await _checkingAccountDb.Movements.FindAsync(accountId, type);
+            List<Movement> movement = new();
 
-            return (IEnumerable<Movement>)movement;
+            movement = await _checkingAccountDb.Movements.Where(x => x.AccountId.Equals(accountId) && x.Type.Equals(type)).ToListAsync();
+
+            return movement;
         }
     }
 }

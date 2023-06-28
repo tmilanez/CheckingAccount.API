@@ -8,8 +8,8 @@ namespace CheckingAccount.API.Domain.Validations
 {
     public static class MovementValidation
     {
-        public const string Deposit = "Deposit";
-        public const string Withdraw = "Withdraw";
-        public const string Transfer = "Transfer";
+        public const string Deposit = "DEPOSIT";
+        public const string Withdraw = "WITHDRAW";
+        public const string Transfer = "TRANSFER";
     }
 }

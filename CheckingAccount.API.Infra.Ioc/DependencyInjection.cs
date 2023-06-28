@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Autofac;
+using AutoMapper;
+using CheckingAccount.API.Application.DTO.Validations;
 using CheckingAccount.API.Application.Mappings;
 using CheckingAccount.API.Application.Services;
 using CheckingAccount.API.Application.Services.Interfaces;
@@ -27,7 +29,7 @@ namespace CheckingAccount.API.Infra.Ioc
         {
             services.AddAutoMapper(typeof(AccountProfile));
             services.AddScoped<IAccountService, AccountService>();
-            //services.AddScoped<IMovementService, MovementService>();
+            services.AddScoped<IMovementService, MovementService>();
             return services; 
         }
     }

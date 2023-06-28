@@ -11,5 +11,6 @@ namespace CheckingAccount.API.Domain.Repositories
     {
         Task<Account> CreateAsync(Account account);
         Task<Account> GetBalanceByIdAsync(string id);
+        Task<Account> UpdateBalance(Account account);
     }
 }

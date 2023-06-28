@@ -20,6 +20,8 @@ namespace CheckingAccount.API.Application.DTO.Validations
             _accountRepository = accountRepository;
             _movementRepository = movementRepository;
 
+            ClassLevelCascadeMode = CascadeMode.Stop;
+
             RuleSet(MovementValidation.Deposit, () =>
             {
                 ValidateExistingAccount();
@@ -39,8 +41,8 @@ namespace CheckingAccount.API.Application.DTO.Validations
             {
                 ValidateExistingAccount();
                 ValidateBalance();
+                new MovementDTOValidation();
             });
-
         }
 
         private void ValidateBalance()

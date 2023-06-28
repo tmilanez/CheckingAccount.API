@@ -32,5 +32,12 @@ namespace CheckingAccount.API.Infra.Repositories
 
            return account;
         }
+
+        public async Task<Account> UpdateBalance(Account account)
+        {
+            _checkingAccountDb.Update(account);
+            await _checkingAccountDb.SaveChangesAsync();
+            return account;
+        }
     }
 }

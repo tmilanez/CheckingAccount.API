@@ -48,7 +48,10 @@ namespace CheckingAccount.API.Application.Services
 
             var balance = await _accountRepository.GetBalanceByIdAsync(id);
 
-            return  ResultService.Ok<AccountDTO>(_mapper.Map<AccountDTO>(balance));
+            if (balance == null)
+                return ResultService.Fail<AccountDTO>("The account could not be found by the informed id.");           
+
+            return ResultService.Ok(_mapper.Map<AccountDTO>(balance));
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using CheckingAccount.API.Domain.Model;
+﻿using CheckingAccount.API.Application.DTO;
+using CheckingAccount.API.Application.Services;
+using CheckingAccount.API.Application.Services.Interfaces;
+using CheckingAccount.API.Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Security.Principal;
 
 namespace CheckingAccount.API.Controllers
 {
@@ -9,10 +11,21 @@ namespace CheckingAccount.API.Controllers
     [ApiController]
     public class MovementController : ControllerBase
     {
-        [HttpPost()]
-        public async Task<IActionResult> CreateMovementAsync([FromBody] Movement movement)
+        private readonly IMovementService _movementService;
+
+        public MovementController(IMovementService movementService)
         {
-            return Ok();
+            _movementService = movementService;
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> CreateMovementAsync([FromBody] MovementDTO movement)
+        {
+            var result = await _movementService.CreateAsync(movement);
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         /// <summary>
@@ -25,7 +38,11 @@ namespace CheckingAccount.API.Controllers
         [HttpGet("{accountId}/movement")]
         public async Task<IActionResult> GetMovement([FromRoute] string accountId, [FromQuery] DateTime initialDate, [FromQuery] DateTime finalDate)
         {
-            return Ok();
+            var result = await _movementService.GetMovement(accountId, initialDate, finalDate);
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
 
         /// <summary>
@@ -37,7 +54,21 @@ namespace CheckingAccount.API.Controllers
         [HttpGet("{accountId}/movement/{operationType}")]
         public async Task<IActionResult> GetMovementByOperationType([FromRoute] string accountId, [FromRoute] string operationType)
         {
-            return Ok();
+            var result = await _movementService.GetMovementByOperationTypeAsync(accountId, operationType);
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
+        }
+
+        [HttpPost("{accountId}/transfer")]
+        public async Task<IActionResult> Transfer([FromRoute] string accountId, [FromQuery]string destinationAccountId, [FromQuery] decimal amount)
+        {
+            var result = await _movementService.TransferAsync(accountId, destinationAccountId, amount);
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
     }
 }
